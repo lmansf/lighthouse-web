@@ -3,16 +3,16 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Lighthouse — your local-first AI vault</title>
+    <title>Lighthouse · you decide what AI sees</title>
     <meta
       name="description"
-      content="Lighthouse is a local-first RAG vault: curate exactly which files your AI can see, and chat grounded over them. Download for Windows."
+      content="Lighthouse gives IT a governance control for AI: nothing is visible to AI until you shine the light on it. Your files never leave your environment. Half the price of Copilot. Download for Windows."
     />
     <!-- Open Graph -->
-    <meta property="og:title" content="Lighthouse — your local-first AI vault" />
+    <meta property="og:title" content="Lighthouse · you decide what AI sees" />
     <meta
       property="og:description"
-      content="Curate exactly which local files your AI can see, and chat grounded over them. Download for Windows."
+      content="A governance control for AI. Nothing is exposed until you include it, and your files never leave your environment. Half the price of Copilot."
     />
     <meta property="og:type" content="website" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
@@ -159,10 +159,11 @@
         <rect x="23" y="38" width="18" height="4" fill="#4f7cff" opacity="0.7" />
       </svg>
 
-      <h1>Lighthouse</h1>
+      <h1>You decide what AI sees.</h1>
       <p class="tagline">
-        Your local-first AI vault. Curate exactly which files your AI can see —
-        then chat, grounded over them. Your documents never leave your machine.
+        Lighthouse is a governance control for AI. Nothing is visible to AI until
+        you shine the light on it, and your files never leave your environment.
+        Roll out a credible AI win without becoming the person who leaked sensitive data.
       </p>
 
       <a class="cta" id="download" href="#" rel="noopener">
@@ -174,6 +175,11 @@
       <p class="sub">
         Free 14-day trial · Windows 10/11 ·
         <a id="other" href="#">other platforms</a>
+      </p>
+      <!-- Subtle subscribe link, hidden until paid mode is enabled below. -->
+      <p class="sub" id="subscribe-wrap" style="display: none">
+        or <a id="subscribe" href="#">subscribe, $14.99 per seat / month</a>
+        (half the price of Copilot)
       </p>
 
       <div class="links">
@@ -187,22 +193,31 @@
 
       <section class="features">
         <div class="feature">
-          <h3>You decide what's visible</h3>
-          <p>Toggle individual files in and out of your AI's view. Nothing is shared unless you include it.</p>
+          <h3>Opt in by default</h3>
+          <p>Nothing is exposed to AI until you toggle it on. The empty state is the feature: Lighthouse sees nothing until you say so.</p>
         </div>
         <div class="feature">
-          <h3>Link in place</h3>
-          <p>Reference files where they already live on disk — no copies, no syncing, no cloud.</p>
+          <h3>Your files stay put</h3>
+          <p>Local-first and in your own environment. Reference files where they already live, with no copies, no syncing, and no third-party cloud.</p>
         </div>
         <div class="feature">
-          <h3>Grounded answers</h3>
-          <p>Chat over your own documents with citations back to the source.</p>
+          <h3>See what's exposed</h3>
+          <p>One view of everything currently included, so you can show leadership exactly what AI can and cannot see.</p>
+        </div>
+        <div class="feature">
+          <h3>Grounded, with citations</h3>
+          <p>Answers come only from the documents you included, cited back to the source. Point it at the files and folders you already use.</p>
         </div>
       </section>
+
+      <p class="sub" style="margin-top: 40px; max-width: 540px; margin-left: auto; margin-right: auto;">
+        Built for IT and department leads who need control. Also great for
+        researchers and students with notes to query.
+      </p>
     </main>
 
     <footer>
-      Lighthouse is open source.
+      © 2026 Lighthouse ·
       <a id="footer-gh" href="#">github.com/lmansf/lighthouse</a>
     </footer>
 
@@ -213,10 +228,21 @@
       var WIN_DOWNLOAD = REPO + "/releases/latest/download/Lighthouse-Setup.exe";
       var RELEASES = REPO + "/releases/latest";
 
+      // Paid subscriptions: off for now. To turn on, set PAID_ENABLED = true and
+      // SUBSCRIBE_URL to your Stripe Payment Link (or checkout) for the $14.99/mo
+      // plan; the subscribe link then appears.
+      var PAID_ENABLED = false;
+      var SUBSCRIBE_URL = "";
+
       document.getElementById("download").href = WIN_DOWNLOAD;
       document.getElementById("other").href = RELEASES;
       document.getElementById("github").href = REPO;
       document.getElementById("footer-gh").href = REPO;
+
+      if (PAID_ENABLED && SUBSCRIBE_URL) {
+        document.getElementById("subscribe").href = SUBSCRIBE_URL;
+        document.getElementById("subscribe-wrap").style.display = "";
+      }
     </script>
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };

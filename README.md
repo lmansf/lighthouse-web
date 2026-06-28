@@ -24,6 +24,14 @@ first release is published with that asset, the button will 404.
 To change the repo, edit the `REPO` constant in the `<script>` at the bottom of
 `index.html` — every link derives from it.
 
+### Paid subscriptions
+
+The page can advertise a paid plan (`$14.99` per seat / month, anchored at half
+the price of Copilot). It is off by default. To enable it, in the same
+`<script>` set `PAID_ENABLED = true` and point `SUBSCRIBE_URL` at your Stripe
+Payment Link (or checkout). The subscribe link under the download button only
+appears when both are set; otherwise it stays hidden.
+
 ## Deploy to Vercel
 
 No framework, no build. Either:
