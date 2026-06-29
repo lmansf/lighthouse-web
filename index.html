@@ -84,6 +84,12 @@
       .cta:hover { transform: translateY(-2px); box-shadow: 0 16px 40px var(--ring); }
       .cta:active { transform: translateY(0); }
       .cta svg { width: 26px; height: 26px; }
+      /* No installer published yet: muted, still links to the releases page. */
+      .cta.soon {
+        background: linear-gradient(180deg, #6b7686, #586173);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+        color: #f3f5f8;
+      }
       .sub {
         margin: 16px 0 0;
         font-size: 14px;
@@ -207,16 +213,55 @@
     </footer>
 
     <script>
-      // Single source of truth for the GitHub repo. The Windows installer is the
-      // "Lighthouse-Setup.exe" asset on the latest GitHub Release.
+      // Single source of truth for the GitHub repo.
       var REPO = "https://github.com/lmansf/lighthouse";
-      var WIN_DOWNLOAD = REPO + "/releases/latest/download/Lighthouse-Setup.exe";
-      var RELEASES = REPO + "/releases/latest";
+      // The releases *index* returns 200 even with no releases yet, so it's a
+      // safe default that never 404s. We upgrade the button to the direct
+      // Windows installer below once a release actually publishes one.
+      var RELEASES_INDEX = REPO + "/releases";
+      var API_LATEST = "https://api.github.com/repos/lmansf/lighthouse/releases/latest";
 
-      document.getElementById("download").href = WIN_DOWNLOAD;
-      document.getElementById("other").href = RELEASES;
+      var dl = document.getElementById("download");
+      var other = document.getElementById("other");
       document.getElementById("github").href = REPO;
       document.getElementById("footer-gh").href = REPO;
+
+      // Safe defaults until we learn what's actually released.
+      dl.href = RELEASES_INDEX;
+      other.href = RELEASES_INDEX;
+
+      // Self-healing: ask GitHub for the latest release. If it has a Windows
+      // installer (.exe) asset, point the button straight at it; otherwise leave
+      // the button on the releases page and mark it as not-yet-available so it
+      // never lands on a 404.
+      fetch(API_LATEST, { headers: { Accept: "application/vnd.github+json" } })
+        .then(function (r) {
+          if (!r.ok) throw new Error("no release");
+          return r.json();
+        })
+        .then(function (rel) {
+          var assets = rel.assets || [];
+          var exe = assets.filter(function (a) {
+            return /\.exe$/i.test(a.name);
+          })[0];
+          if (exe) {
+            dl.href = exe.browser_download_url;
+          }
+          // "other platforms" -> the specific release page when one exists.
+          other.href = rel.html_url || RELEASES_INDEX;
+          if (!exe) markComingSoon();
+        })
+        .catch(function () {
+          // No published release yet (404) or API unreachable: keep the safe
+          // releases-index link and tell the user the build is on its way.
+          markComingSoon();
+        });
+
+      function markComingSoon() {
+        dl.classList.add("soon");
+        var label = dl.childNodes[dl.childNodes.length - 1];
+        if (label && label.nodeType === 3) label.textContent = " Windows build coming soon";
+      }
     </script>
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
