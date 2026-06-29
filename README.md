@@ -9,20 +9,30 @@ a single static page with a one-click Windows download and a link to the repo.
 - `favicon.svg` — the lighthouse mark.
 - `vercel.json` — security headers + clean static serving.
 
-The big **Download for Windows** button points at the latest GitHub Release
-asset:
+The big **Download for Windows** button is self-healing and never lands on a
+404. On load the page links it (and the "other platforms" link) to the releases
+**index** (`/releases`), which returns 200 even when no release exists yet. It
+then queries the GitHub API for the latest release:
 
 ```
-https://github.com/lmansf/lighthouse/releases/latest/download/Lighthouse-Setup.exe
+https://api.github.com/repos/lmansf/lighthouse/releases/latest
 ```
 
-That URL always resolves to the newest installer **as long as each release
-attaches an asset named exactly `Lighthouse-Setup.exe`** (the app's
-electron-builder config sets `nsis.artifactName` to that stable name). Until the
-first release is published with that asset, the button will 404.
+- If the latest release has a `.exe` asset, the button points straight at that
+  installer's download URL and the "other platforms" link points at that
+  release's page.
+- If GitHub reports no published release (404) or the latest release has no
+  `.exe` asset, the button is greyed out and relabelled **"Windows build coming
+  soon"** while still linking to the releases index.
+- If the API call fails transiently (rate limit, 5xx, network/CORS), the button
+  keeps the safe releases-index link and its normal label.
+
+This means publishing a release with a Windows installer automatically upgrades
+the button — no edit to this page required.
 
 To change the repo, edit the `REPO` constant in the `<script>` at the bottom of
-`index.html` — every link derives from it.
+`index.html` — every link derives from it. The GitHub API URL (`API_LATEST`) is
+spelled out separately in the same block, so update it to match.
 
 ## Deploy to Vercel
 
@@ -35,7 +45,8 @@ No framework, no build. Either:
 ## Publishing an installer for the download button to find
 
 In the `lighthouse` repo, build the Windows installer and attach it to a
-release whose asset is named `Lighthouse-Setup.exe`:
+release. The button finds the first asset whose name ends in `.exe`, so any
+`.exe` name works (e.g. `Lighthouse-Setup.exe`):
 
 ```sh
 npm run dist               # produces release/Lighthouse-Setup.exe (Windows)
