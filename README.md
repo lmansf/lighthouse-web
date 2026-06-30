@@ -9,30 +9,29 @@ a single static page with a one-click Windows download and a link to the repo.
 - `favicon.svg` — the lighthouse mark.
 - `vercel.json` — security headers + clean static serving.
 
-The big **Download for Windows** button is self-healing and never lands on a
-404. On load the page links it (and the "other platforms" link) to the releases
-**index** (`/releases`), which returns 200 even when no release exists yet. It
-then queries the GitHub API for the latest release:
+The big **Download for Windows** button links to `/download/windows`, which
+`vercel.json` redirects (a temporary `307`, since the redirect uses
+`"permanent": false`) straight to GitHub's permanent latest-release asset URL:
 
 ```
-https://api.github.com/repos/lmansf/lighthouse/releases/latest
+https://github.com/lmansf/lighthouse/releases/latest/download/Lighthouse-Setup.exe
 ```
 
-- If the latest release has a `.exe` asset, the button points straight at that
-  installer's download URL and the "other platforms" link points at that
-  release's page.
-- If GitHub reports no published release (404) or the latest release has no
-  `.exe` asset, the button is greyed out and relabelled **"Windows build coming
-  soon"** while still linking to the releases index.
-- If the API call fails transiently (rate limit, 5xx, network/CORS), the button
-  keeps the safe releases-index link and its normal label.
+GitHub always resolves `releases/latest/download/<asset>` to the newest
+published release, so the installer download starts directly with no client-side
+JavaScript, no API calls, and no intermediate releases page.
 
-This means publishing a release with a Windows installer automatically upgrades
-the button — no edit to this page required.
+Two requirements keep this working:
 
-To change the repo, edit the `REPO` constant in the `<script>` at the bottom of
-`index.html` — every link derives from it. The GitHub API URL (`API_LATEST`) is
-spelled out separately in the same block, so update it to match.
+- The published installer asset MUST be named exactly `Lighthouse-Setup.exe`.
+  The `lighthouse` repo's electron-builder `nsis.artifactName` is set to this
+  stable, version-less name so the URL never changes between releases. If a
+  release ships the installer under any other name, the redirect 404s.
+- The `lmansf/lighthouse` repo MUST be public, so anonymous visitors can
+  download the asset without authentication.
+
+To change the repo, update the redirect `destination` in `vercel.json` and the
+hardcoded `github.com/lmansf/lighthouse` links in `index.html`.
 
 ## Deploy to Vercel
 
@@ -45,8 +44,8 @@ No framework, no build. Either:
 ## Publishing an installer for the download button to find
 
 In the `lighthouse` repo, build the Windows installer and attach it to a
-release. The button finds the first asset whose name ends in `.exe`, so any
-`.exe` name works (e.g. `Lighthouse-Setup.exe`):
+release. The asset MUST be named exactly `Lighthouse-Setup.exe` or the
+`/download/windows` redirect 404s:
 
 ```sh
 npm run dist               # produces release/Lighthouse-Setup.exe (Windows)
