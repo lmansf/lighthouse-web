@@ -171,7 +171,7 @@
         then chat, grounded over them. Your documents never leave your machine.
       </p>
 
-      <a class="cta" id="download" href="#" rel="noopener">
+      <a class="cta" id="download" href="/download/windows" rel="noopener">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M12 3v10.6l3.3-3.3 1.4 1.4L12 17.4 7.3 11.7l1.4-1.4 3.3 3.3V3h2zM5 19h14v2H5z" />
         </svg>
@@ -179,11 +179,11 @@
       </a>
       <p class="sub">
         Free 14-day trial · Windows 10/11 ·
-        <a id="other" href="#">other platforms</a>
+        <a id="other" href="https://github.com/lmansf/lighthouse/releases" rel="noopener">other platforms</a>
       </p>
 
       <div class="links">
-        <a class="ghost" id="github" href="#" rel="noopener">
+        <a class="ghost" id="github" href="https://github.com/lmansf/lighthouse" rel="noopener">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.46-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.36 1.12 2.94.85.09-.66.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05a9.36 9.36 0 0 1 5 0c1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z" />
           </svg>
@@ -209,66 +209,9 @@
 
     <footer>
       © 2026 Lighthouse ·
-      <a id="footer-gh" href="#">github.com/lmansf/lighthouse</a>
+      <a id="footer-gh" href="https://github.com/lmansf/lighthouse">github.com/lmansf/lighthouse</a>
     </footer>
 
-    <script>
-      // Single source of truth for the GitHub repo.
-      var REPO = "https://github.com/lmansf/lighthouse";
-      // The releases *index* returns 200 even with no releases yet, so it's a
-      // safe default that never 404s. We upgrade the button to the direct
-      // Windows installer below once a release actually publishes one.
-      var RELEASES_INDEX = REPO + "/releases";
-      var API_LATEST = "https://api.github.com/repos/lmansf/lighthouse/releases/latest";
-
-      var dl = document.getElementById("download");
-      var other = document.getElementById("other");
-      document.getElementById("github").href = REPO;
-      document.getElementById("footer-gh").href = REPO;
-
-      // Safe defaults until we learn what's actually released.
-      dl.href = RELEASES_INDEX;
-      other.href = RELEASES_INDEX;
-
-      // Self-healing: ask GitHub for the latest release. If it has a Windows
-      // installer (.exe) asset, point the button straight at it; otherwise leave
-      // the button on the releases page and mark it as not-yet-available so it
-      // never lands on a 404.
-      fetch(API_LATEST, { headers: { Accept: "application/vnd.github+json" } })
-        .then(function (r) {
-          // 404 means GitHub has no published release yet -> mark coming soon.
-          // Other non-OK statuses (403 rate limit, 5xx) are transient: keep the
-          // safe releases-index default and the normal label.
-          if (r.status === 404) {
-            markComingSoon();
-            return null;
-          }
-          if (!r.ok) return null;
-          return r.json();
-        })
-        .then(function (rel) {
-          if (!rel) return;
-          var assets = rel.assets || [];
-          var exe = assets.filter(function (a) {
-            return /\.exe$/i.test(a.name);
-          })[0];
-          if (exe) {
-            dl.href = exe.browser_download_url;
-          }
-          // "other platforms" -> the specific release page when one exists.
-          other.href = rel.html_url || RELEASES_INDEX;
-          if (!exe) markComingSoon();
-        })
-        .catch(function () {
-          // API unreachable (network/CORS): keep the safe releases-index link.
-        });
-
-      function markComingSoon() {
-        dl.classList.add("soon");
-        var label = document.getElementById("download-label");
-        if (label) label.textContent = "Windows build coming soon";
-      }
-    </script>
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
     </script>
