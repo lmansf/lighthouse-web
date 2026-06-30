@@ -10,8 +10,8 @@ a single static page with a one-click Windows download and a link to the repo.
 - `vercel.json` — security headers + clean static serving.
 
 The big **Download for Windows** button links to `/download/windows`, which
-`vercel.json` 302-redirects straight to GitHub's permanent latest-release asset
-URL:
+`vercel.json` redirects (a temporary `307`, since the redirect uses
+`"permanent": false`) straight to GitHub's permanent latest-release asset URL:
 
 ```
 https://github.com/lmansf/lighthouse/releases/latest/download/Lighthouse-Setup.exe
