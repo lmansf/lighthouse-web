@@ -3,19 +3,67 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Lighthouse — your local-first AI vault</title>
+    <title>Lighthouse — Private, Local-First AI for Your Documents</title>
     <meta
       name="description"
-      content="Lighthouse is a local-first RAG vault: curate exactly which files your AI can see, and chat grounded over them. Download for Windows."
+      content="Ask your files anything and get cited answers — privately. Lighthouse is a local-first document AI: your files never leave your machine. Free trial for Windows, macOS &amp; Linux."
     />
-    <!-- Open Graph -->
-    <meta property="og:title" content="Lighthouse — your local-first AI vault" />
+    <link rel="canonical" href="https://lhvault.app/" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0b1220" />
+
+    <!-- Open Graph (Facebook, LinkedIn, Slack, iMessage, Discord previews) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Lighthouse" />
+    <meta property="og:url" content="https://lhvault.app/" />
+    <meta property="og:title" content="Lighthouse — Your files can answer you now. Privately." />
     <meta
       property="og:description"
-      content="Curate exactly which local files your AI can see, and chat grounded over them. Download for Windows."
+      content="Local-first document AI with cited answers. Your files never leave your machine. Free trial for Windows, macOS &amp; Linux."
     />
-    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://lhvault.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Lighthouse — private, local-first document AI. A lighthouse beam over a night sea."
+    />
+
+    <!-- Twitter / X card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Lighthouse — Your files can answer you now. Privately." />
+    <meta
+      name="twitter:description"
+      content="Local-first document AI with cited answers. Your files never leave your machine. Free trial for Windows, macOS &amp; Linux."
+    />
+    <meta name="twitter:image" content="https://lhvault.app/og-image.png" />
+
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Structured data: lets search engines show Lighthouse as installable
+         software (name, OS, price) in rich results. softwareVersion is
+         informational — no need to bump it on every release. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Lighthouse",
+        "url": "https://lhvault.app/",
+        "image": "https://lhvault.app/og-image.png",
+        "description": "Private, local-first AI for your documents. Ask questions and get cited answers — your files never leave your machine.",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Windows, macOS, Linux",
+        "softwareVersion": "0.5.1",
+        "downloadUrl": "https://github.com/lmansf/lighthouse/releases/latest",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "description": "Free 14-day trial"
+        }
+      }
+    </script>
     <style>
       :root {
         --bg: #0b1220;

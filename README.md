@@ -5,8 +5,15 @@ a single static page with a one-click Windows download and a link to the repo.
 
 ## What it is
 
-- `index.html` — the whole page (inline CSS/JS, no build step).
+- `index.html` — the whole page (inline CSS/JS, no build step). The `<head>`
+  carries the SEO surface: title/description, canonical, Open Graph + Twitter
+  card tags, and JSON-LD `SoftwareApplication` structured data.
 - `favicon.svg` — the lighthouse mark.
+- `apple-touch-icon.png` — 180×180 icon for iOS bookmarks/shares.
+- `og-image.png` — the 1200×630 social-share card (`og:image` / `twitter:image`).
+- `robots.txt` / `sitemap.xml` — crawler directives + page list for search
+  engines. After deploying changes, submit `sitemap.xml` in Google Search
+  Console and Bing Webmaster Tools once; they re-crawl on their own after that.
 - `vercel.json` — security headers + clean static serving.
 
 The big **Download for Windows** button links to `/download/windows`, which
